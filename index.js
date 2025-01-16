@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors"
+import { log } from "console";
 
 const app = express();
 const httpServer = createServer(app);
@@ -25,21 +26,20 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("A user connected to the Socket");
-
-  socket.on("new-user", (username) => {
-    console.log("new user", username);
-    socket.broadcast.emit("message", {
-      content: username + " has connected",
-      author: "Server",
-      date: new Date()
-    });
-  });
+  io.emit("message", {
+    content: socket.handshake.query.username + " joined the chat",
+    author: "Server",
+    date: new Date()
+  })
 
   socket.on("message", (data) => {
     console.log("new message", data);
     io.emit("message", data);
   })
 
+  socket.on("disconnecting", () => {
+    console.log(socket.username + " has disconnected");
+  });
 });
 
 httpServer.listen(3000);
