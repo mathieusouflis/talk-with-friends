@@ -2,10 +2,8 @@ version: '3.8'
 
 services:
   app:
-    image: node:23
-    working_dir: /usr/src/app
+    container_name: websocker-api-server
+    build: .
     ports:
       - "3000:3000"
-    volumes:
-      - .:/usr/src/app
-    command: sh -c "npm install && npm run start"
+    command: node index.js

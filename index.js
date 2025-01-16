@@ -24,12 +24,16 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.emit("message", {
-    content : "Someone Just Connect!",
-    author : "Server",
-    date : new Date()
-  })
+  console.log("A user connected to the Socket");
+
+  socket.on("new-user", (username) => {
+    console.log("new user", username);
+    socket.broadcast.emit("message", {
+      content: username + " has connected",
+      author: "Server",
+      date: new Date()
+    });
+  });
 
   socket.on("message", (data) => {
     console.log("new message", data);
