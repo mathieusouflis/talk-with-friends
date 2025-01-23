@@ -2,7 +2,6 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors"
-import { log } from "console";
 
 const app = express();
 const httpServer = createServer(app);
@@ -37,8 +36,13 @@ io.on("connection", (socket) => {
     io.emit("message", data);
   })
 
-  socket.on("disconnecting", () => {
+  socket.on("disconnect", () => {
     console.log(socket.username + " has disconnected");
+    io.emit("message", {
+      content: socket.handshake.query.username + " left the chat",
+      author: "Server",
+      date: new Date()
+    })
   });
 });
 
