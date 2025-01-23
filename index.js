@@ -36,6 +36,11 @@ io.on("connection", (socket) => {
     io.emit("message", data);
   })
 
+  socket.on("messageUnity", (data) => {
+    console.log("UNITY - NEW MESSAGE", data);
+    socket.broadcast.emit("messageUnity", data);
+  })
+
   socket.on("disconnect", () => {
     console.log(socket.username + " has disconnected");
     io.emit("message", {
