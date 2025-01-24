@@ -44,8 +44,7 @@ io.on("connection", (socket) => {
 
   socket.on("messageUnity", (data) => {
     // console.log("UNITY - NEW MESSAGE", data);
-    // socket.broadcast.emit("messageUnity", data);
-    io.emit("messageUnity", data);
+    socket.broadcast.emit("messageUnity", data);
   })
 
   const read = () => {
